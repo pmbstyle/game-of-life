@@ -1,6 +1,6 @@
-const gridSize = 50;
-const cellSize = 10;
-let grid = createEmptyGrid(gridSize);
+const cellSize = 10; // You can adjust the cell size
+let gridWidth, gridHeight;
+let grid;
 let gameStarted = false;
 let gameInterval;
 
@@ -9,32 +9,40 @@ const ctx = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
 const restartButton = document.getElementById('restartButton');
 
-canvas.addEventListener('mousedown', function(e) {
-    if (gameStarted) return;
+window.addEventListener('resize', resizeAndResetCanvas);
+canvas.addEventListener('mousedown', handleCanvasClick);
+startButton.addEventListener('click', startGame);
+restartButton.addEventListener('click', restartGame);
 
-    const rect = canvas.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / cellSize);
-    const y = Math.floor((e.clientY - rect.top) / cellSize);
-    grid[y][x] = !grid[y][x];
-    drawCell(x, y, grid[y][x]);
-});
+document.getElementById('startPlacing').addEventListener('click', startPlacingCells);
 
-startButton.addEventListener('click', function() {
-    if (!gameStarted) {
-        gameStarted = true;
-        startGame();
-    }
-});
+function createEmptyGrid(width, height) {
+    return Array.from({ length: height }, () => Array(width).fill(false));
+}
 
-restartButton.addEventListener('click', function() {
-    gameStarted = false;
-    clearInterval(gameInterval);
-    grid = createEmptyGrid(gridSize);
+function resizeAndResetCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    gridWidth = Math.floor(canvas.width / cellSize);
+    gridHeight = Math.floor(canvas.height / cellSize);
+    grid = createEmptyGrid(gridWidth, gridHeight);
     render(grid);
-});
+}
 
-function createEmptyGrid(size) {
-    return Array.from({ length: size }, () => Array(size).fill(false));
+function handleCanvasClick(e) {
+  if (gameStarted) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;    // the scale factor for X
+  const scaleY = canvas.height / rect.height;  // the scale factor for Y
+
+  const x = Math.floor((e.clientX - rect.left) * scaleX / cellSize);
+  const y = Math.floor((e.clientY - rect.top) * scaleY / cellSize);
+
+  if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight) {
+      grid[y][x] = !grid[y][x];
+      drawCell(x, y, grid[y][x]);
+  }
 }
 
 function drawCell(x, y, alive) {
@@ -43,8 +51,8 @@ function drawCell(x, y, alive) {
 }
 
 function render(grid) {
-    for (let y = 0; y < gridSize; y++) {
-        for (let x = 0; x < gridSize; x++) {
+    for (let y = 0; y < gridHeight; y++) {
+        for (let x = 0; x < gridWidth; x++) {
             drawCell(x, y, grid[y][x]);
         }
     }
@@ -55,8 +63,8 @@ function countNeighbors(grid, x, y) {
     for (let i = -1; i <= 1; i++) {
         for (let j = -1; j <= 1; j++) {
             if (i === 0 && j === 0) continue;
-            const xi = (x + i + gridSize) % gridSize;
-            const yj = (y + j + gridSize) % gridSize;
+            const xi = (x + i + gridWidth) % gridWidth;
+            const yj = (y + j + gridHeight) % gridHeight;
             count += grid[yj][xi] ? 1 : 0;
         }
     }
@@ -64,9 +72,9 @@ function countNeighbors(grid, x, y) {
 }
 
 function nextGeneration(grid) {
-    const newGrid = createEmptyGrid(gridSize);
-    for (let y = 0; y < gridSize; y++) {
-        for (let x = 0; x < gridSize; x++) {
+    const newGrid = createEmptyGrid(gridWidth, gridHeight);
+    for (let y = 0; y < gridHeight; y++) {
+        for (let x = 0; x < gridWidth; x++) {
             const neighbors = countNeighbors(grid, x, y);
             newGrid[y][x] = (grid[y][x] && neighbors === 2) || neighbors === 3;
         }
@@ -80,8 +88,21 @@ function update() {
 }
 
 function startGame() {
-    gameInterval = setInterval(update, 1000);
+    if (!gameStarted) {
+        gameStarted = true;
+        gameInterval = setInterval(update, 100);
+    }
 }
 
-// Initial render of the empty grid
-render(grid);
+function restartGame() {
+    gameStarted = false;
+    clearInterval(gameInterval);
+    resizeAndResetCanvas();
+}
+
+function startPlacingCells() {
+    document.querySelector('.rules').classList.add('hidden');
+}
+
+// Initial setup
+resizeAndResetCanvas();

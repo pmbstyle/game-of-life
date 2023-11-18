@@ -26,4 +26,4 @@ After installing Node.js, you can set up the project by following these steps:
 To run the project on your local machine:
 
 1. Start the development server with Vite: `npm run dev` or `yarn dev`
-2. Open your web browser and navigate to `http://localhost:3000/` (or the URL provided in your terminal).
+2. Open your web browser and navigate to `http://localhost:5173/` (or the URL provided in your terminal).

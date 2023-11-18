@@ -2,21 +2,29 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Vite App</title>
-        <style>
-            #gameCanvas {
-                border: 1px solid black;
-            }
-        </style>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/style.css" />
+        <title>JS Game of Life</title>
     </head>
     <body>
         <div id="app">
-            <canvas id="gameCanvas" width="500" height="500"></canvas>
-            <button id="startButton">Start Game</button>
-            <button id="restartButton">Restart</button>
-            <script src="game-of-life.js"></script>
+            <canvas id="gameCanvas" width="1000" height="1000"></canvas>
+            <div class="controls">
+                <button id="startButton" class="btn btn-success">Start Game</button>
+                <button id="restartButton" class="btn btn-error">Stop & Restart</button>
+            </div>
+            <div class="rules">
+                <h2>Rules</h2>
+                <ul>
+                    <li>Any live cell with fewer than two live neighbours dies, as if by underpopulation.</li>
+                    <li>Any live cell with two or three live neighbours lives on to the next generation.</li>
+                    <li>Any live cell with more than three live neighbours dies, as if by overpopulation.</li>
+                    <li>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</li>
+                </ul>
+                <p class="my-4">Start with placing cells, then hit the "Start Game" button</p>
+                <button id="startPlacing" class="btn btn-success mt-4">Start Placing Cells</button>
+            </div>
+            <div class="toast toast-bottom toast-right"></div>
         </div>
         <script type="module" src="/main.js"></script>
     </body>
