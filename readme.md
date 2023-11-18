@@ -1,5 +1,7 @@
 # Game of Life
 
+![Demo](demo.gif)
+
 ## Overview
 
 This project is an implementation of John Conway's Game of Life, a cellular automaton that simulates the life cycle of cells. It is built with HTML, JavaScript, and Vite as the build tool for a faster development experience. Users can interact with the game by setting initial cell states on a grid and watching the cells evolve over time according to a set of rules. The project also includes functionality to start, stop, and reset the game.
