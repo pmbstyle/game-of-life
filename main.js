@@ -47,7 +47,12 @@ function handleCanvasClick(e) {
 
 function drawCell(x, y, alive) {
     ctx.fillStyle = alive ? 'black' : 'white';
-    ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+    ctx.fillRect(
+        x * cellSize + 1, // Add 1px for the left margin
+        y * cellSize + 1, // Add 1px for the top margin
+        cellSize - 2,     // Subtract 2px to compensate for left and right margins
+        cellSize - 2      // Subtract 2px to compensate for top and bottom margins
+    );
 }
 
 function render(grid) {

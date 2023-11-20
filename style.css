@@ -53,6 +53,7 @@ h1 {
 
 #gameCanvas {
     display: block;
+    background: #f7f7f7;
 }
 
 .controls {
@@ -98,10 +99,3 @@ h1 {
 .btn {
     color:#fff;
 }
-
-/* .toast {
-    margin-right: 10px;
-    margin-bottom: 10px;
-    color: #fff;
-    font-size: 1.2em;
-} */
